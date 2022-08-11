@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from "@nestjs/config";
+import { APP_FILTER } from "@nestjs/core";
 import Joi from 'joi';
 
 import { DatabaseModule } from "./database/database.module";
 import { PostModule } from './post/post.module';
 import { UserModule } from "./user/user.module";
+import { ExceptionsLoggerFilter } from "./utils/exception.logger.filter";
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -32,6 +34,12 @@ import { AppService } from './app.service';
     PostModule,
     UserModule,
   ],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionsLoggerFilter,
+    },
+    AppService
+  ],
 })
 export class AppModule {}

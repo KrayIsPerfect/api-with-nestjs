@@ -22,7 +22,7 @@ export class AuthenticationController {
   ) {
   }
 
-  @Post("register")
+  @Post('register')
   async register(@Body() registrationData: RegisterDto) {
     return this.authenticationService.register(registrationData);
   }

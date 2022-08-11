@@ -1,21 +1,25 @@
 import {
   Body,
-  Controller, Get,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
   HttpCode,
   Post,
   Req,
   Res,
-  UseGuards
-} from "@nestjs/common";
-import { Response } from "express";
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { Response } from 'express';
 
-import RegisterDto from "./dto/register.dto";
-import { AuthenticationService } from "./authentication.service";
-import JwtAuthenticationGuard from "./jwt.authentication.guard";
-import { LocalAuthenticationGuard } from "./local.authentication.guard";
-import RequestWithUser from "./request.with.user.interface";
+import RegisterDto from './dto/register.dto';
+import { AuthenticationService } from './authentication.service';
+import JwtAuthenticationGuard from './jwt.authentication.guard';
+import { LocalAuthenticationGuard } from './local.authentication.guard';
+import RequestWithUser from './request.with.user.interface';
 
 @Controller()
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthenticationController {
   constructor(
     private readonly authenticationService: AuthenticationService
@@ -30,24 +34,17 @@ export class AuthenticationController {
   @UseGuards(JwtAuthenticationGuard)
   @Get()
   authenticate(@Req() request: RequestWithUser) {
-    const user = request.user;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    user.password = undefined;
-    return user;
+    return request.user;
   }
 
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
-  @Post("log-in")
-  async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
-    const { user } = request;
+  @Post('log-in')
+  async logIn(@Req() request: RequestWithUser) {
+    const {user} = request;
     const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
-    response.setHeader("Set-Cookie", cookie);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    user.password = undefined;
-    return response.send(user);
+    request.res?.setHeader('Set-Cookie', cookie);
+    return user;
   }
 
   @UseGuards(JwtAuthenticationGuard)

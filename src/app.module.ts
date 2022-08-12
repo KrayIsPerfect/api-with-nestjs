@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { APP_FILTER } from "@nestjs/core";
 import Joi from 'joi';
 
+import { CategoryModule } from './category/category.module';
 import { DatabaseModule } from "./database/database.module";
 import { PostModule } from './post/post.module';
 import { UserModule } from "./user/user.module";
@@ -31,6 +32,7 @@ import { AppService } from './app.service';
       })
     }),
     DatabaseModule,
+    CategoryModule,
     PostModule,
     UserModule,
   ],

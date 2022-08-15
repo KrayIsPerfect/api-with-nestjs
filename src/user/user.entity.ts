@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
+import PublicFile from '../file/public.file.entity';
 import Post from '../post/post.entity';
 
 import Address from './address.entity';
@@ -29,6 +30,16 @@ class User {
 
   @OneToMany(() => Post, (post: Post) => post.author)
   public posts: Post[];
+  
+  @JoinColumn()
+  @OneToOne(
+    () => PublicFile,
+    {
+      eager: true,
+      nullable: true
+    }
+  )
+  public avatar?: PublicFile | null;
 }
 
 export default User;

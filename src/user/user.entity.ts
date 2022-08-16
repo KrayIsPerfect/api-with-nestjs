@@ -40,6 +40,12 @@ class User {
     }
   )
   public avatar?: PublicFile | null;
+
+  @OneToMany(
+    () => PrivateFile,
+    (file: PrivateFile) => file.owner
+  )
+  public files: PrivateFile[];
 }
 
 export default User;

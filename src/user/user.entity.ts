@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
+import PrivateFile from '../file/private.file.entity';
 import PublicFile from '../file/public.file.entity';
 import Post from '../post/post.entity';
 
@@ -20,6 +21,12 @@ class User {
   @Column()
   @Exclude()
   public password: string;
+
+  @Column({
+    nullable: true
+  })
+  @Exclude()
+  public currentHashedRefreshToken?: string;
 
   @OneToOne(() => Address, {
     cascade: true,

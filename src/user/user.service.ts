@@ -1,3 +1,5 @@
+import assert from 'assert';
+
 import {
   HttpException,
   HttpStatus,
@@ -6,6 +8,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 
 import { FileService } from '../file/file.service';
@@ -94,5 +97,35 @@ export class UserService {
       )
     }
     throw new NotFoundException('User with this id does not exist');
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, userId: number) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.userRepository.update(userId, {
+      currentHashedRefreshToken
+    });
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: number) {
+    const user = await this.getById(userId);
+
+    assert(user.currentHashedRefreshToken, `${user.name} refresh token undefined`);
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.currentHashedRefreshToken
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+  }
+
+  async removeRefreshToken(userId: number) {
+    return this.userRepository.update(userId, {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      currentHashedRefreshToken: null
+    });
   }
 }

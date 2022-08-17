@@ -31,8 +31,8 @@ import { AppService } from './app.service';
         DB_PORT: Joi.number().required(),
         DB_TYPE: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
-        JWT_EXPIRATION_TIME: Joi.string().required(),
-        JWT_SECRET: Joi.string().required(),
+        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
         PORT: Joi.number().required(),
       })
     }),

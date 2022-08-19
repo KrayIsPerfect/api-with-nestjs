@@ -17,6 +17,9 @@ class Post {
   @Column({ nullable: true })
   public category?: string;
 
+  @Column('text', { array: true })
+  public paragraphs: string[];
+
   @Index('IDX_post_authorId')
   @ManyToOne(() => User, (author: User) => author.posts)
   public author: User;

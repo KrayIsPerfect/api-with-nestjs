@@ -31,7 +31,7 @@ export default class SubscriberController {
   @Post()
   @UseGuards(JwtAuthenticationGuard)
   async createPost(@Body() subscriber: CreateSubscriberDto) {
-    return this.subscriberService.emit({
+    return this.subscriberService.send({
       cmd: 'add-subscriber'
     }, subscriber)
   }

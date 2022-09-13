@@ -4,6 +4,7 @@ import { APP_FILTER } from "@nestjs/core";
 import Joi from 'joi';
 
 import { CategoryModule } from './category/category.module';
+import { CommentModule } from './comment/comment.module';
 import { DatabaseModule } from "./database/database.module";
 import { FileModule } from './file/file.module';
 import { PostModule } from './post/post.module';
@@ -41,6 +42,7 @@ import { AppService } from './app.service';
     CategoryModule,
     PostModule,
     UserModule,
+    CommentModule,
   ],
   providers: [
     {
